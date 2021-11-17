@@ -20,16 +20,13 @@ exports.searchBook = async (req,res)=>{
     try{
         const {isbn} = req.query
         const requests = []
-        let url1 = {url:`${process.env.BOOKIE_URL}`+'books/'+`${isbn}`+'/details?key='+`${process.env.KEY}`}
-        let url2 = {url:`${process.env.INFO_URL}`+'search?isbn='+`${isbn}`}
+        let url1 = {api1:`${process.env.BOOKIE_URL}`+'books/'+`${isbn}`+'/details?key='+`${process.env.KEY}`}
+        let url2 = {api2:`${process.env.INFO_URL}`+'search?isbn='+`${isbn}`}
         requests.push(url1,url2)
         let data = await bookSearchApi(requests)
-        if (data.length != 0) return res.send({success:'true',data:data})
-        return res.send({success:'false',data:null})
+        console.log(data)
     }
     catch (err){
         res.send({success:'false',message:err.message})
     }
-    
-
 }

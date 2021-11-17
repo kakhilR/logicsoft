@@ -27,17 +27,17 @@ exports.signup = (req,res)=>{
             })
 
         })
-    }).catch((err) =>{return res.status(401).json(err.message)})
+    }).catch((err) =>{return res.status(500).json(err.message)})
 }
 
 exports.signin = (req,res)=>{
     const {email,password} = req.body
     if(!email|| !password){
-        return res.status(422).json({error:"please enter a valid email or password"})
+        return res.status(400).json({error:"please enter a valid email or password"})
     }
     User.findOne({email:email}).then((user)=>{
         if(!user){
-            return res.status(422).json({message:"No user found with such email"})
+            return res.status(404).json({message:"No user found with such email"})
         }
         bcrypt.compare(password,user.password).then(doMatch=>{
             if(doMatch){
@@ -47,10 +47,10 @@ exports.signin = (req,res)=>{
                 res.json({token,saveduser:{_id,userName,email}})
             }
             else{
-                return res.status(422).json({message:"invalid email or password"})
+                return res.status(400).json({message:"invalid email or password"})
             }
         })
     }).catch(err=>{
-        return res.status(400).json(err.message)
+        return res.status(500).json(err.message)
     })
 }
